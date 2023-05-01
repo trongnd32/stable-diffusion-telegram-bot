@@ -42,6 +42,7 @@ export default function handler(req: NextRequest) {
       const chatId = msg.chat.id;
 
       console.log("message: " + msg.text + ", to chatId: " + chatId);
+      console.log(msg);
       if(req.geo != null) {
         console.log(`request came from ${req.geo.country}, ${req.geo.city}, (${req.geo.latitude}, ${req.geo.longitude}), ip=${req.ip}`);
       }
@@ -75,12 +76,9 @@ export default function handler(req: NextRequest) {
         resolve(new Response(JSON.stringify({
           success: true
         })))
-      } else if(msg.text && (msg.text.equals('/start') || msg.text.equals('/help'))) {
+      } else {
         console.log("Show help message")
         const sentMsg = await telegram.sendMessage(chatId, 'type "/draw what-you-want" to generate picture');
-      } else {
-        console.log("Invalid command")
-        const sentMsg = await telegram.sendMessage(chatId, 'command is invalid');
       }
     }
   });
