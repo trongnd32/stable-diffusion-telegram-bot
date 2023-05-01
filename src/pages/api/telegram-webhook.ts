@@ -76,8 +76,10 @@ export default function handler(req: NextRequest) {
           success: true
         })))
       } else if(msg.text && (msg.text.equals('/start') || msg.text.equals('/help'))) {
+        console.log("Show help message")
         const sentMsg = await telegram.sendMessage(chatId, 'type "/draw what-you-want" to generate picture');
       } else {
+        console.log("Invalid command")
         const sentMsg = await telegram.sendMessage(chatId, 'command is invalid');
       }
     }
