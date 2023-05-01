@@ -40,8 +40,11 @@ export default function handler(req: NextRequest) {
         return;
       }
       const chatId = msg.chat.id;
-      
-      console.log("message, " + msg.text);
+
+      console.log("message: " + msg.text + ", to chatId: " + chatId);
+      if(req.geo != null) {
+        console.log(`request came from ${req.geo.country}, ${req.geo.city}, (${req.geo.latitude}, ${req.geo.longitude}), ip=${req.ip}`);
+      }
       
       if (msg.text && msg.text.startsWith('/draw ')) {
 
