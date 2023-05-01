@@ -5,8 +5,11 @@ class TelegramService {
     const telegramToken = process.env.TELEGRAM_KEY as string;
     this.apiBase += telegramToken;
   }
+  getNow() {
+    return new Date().toLocaleString("en-ca", {timeZone: "Asia/Ho_Chi_Minh"})
+  }
   sendMessage(chat_id, text, parse_mode = undefined) {
-    console.log("Send message: " + text)
+    console.log(`${this.getNow()}   Send message: ${text}`)
     return fetch(`${this.apiBase}/sendMessage`, {
       method: 'POST',
       headers: {
@@ -20,7 +23,7 @@ class TelegramService {
     }).then(r => r.json())
   }
   setWebhook(url: string) {
-    console.log("Set telegram webhook, api url=" + this.apiBase);
+    console.log(`${this.getNow()}   Set telegram webhook, api url=${this.apiBase}`);
     
     return fetch(`${this.apiBase}/setWebhook`, {
       method: 'POST',
@@ -34,7 +37,7 @@ class TelegramService {
     })
   }
   sendPhoto(chat_id, photo_url, caption = '') {
-    console.log("Send photo");
+    console.log(`${this.getNow()}   Send photo`);
     
     return fetch(`${this.apiBase}/sendPhoto`, {
       method: 'POST',
@@ -49,7 +52,7 @@ class TelegramService {
     })
   }
   deleteMessage(chat_id, message_id) {
-    console.log("delete message");
+    console.log(`${this.getNow()}   Delete message`);
     
     return fetch(`${this.apiBase}/deleteMessage`, {
       method: 'POST',
@@ -63,7 +66,7 @@ class TelegramService {
     })
   }
   editMessageText(chat_id, message_id, text) {
-    console.log("edit message, " + text);
+    console.log(`${this.getNow()}   Edit message, ${text}`);
     
     return fetch(`${this.apiBase}/editMessageText`, {
       method: 'POST',

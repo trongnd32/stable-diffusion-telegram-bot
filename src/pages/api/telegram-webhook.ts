@@ -12,13 +12,17 @@ const midJourney = async (prompt: string, parameters = {}) =>
   await ReplicateUtils.run(model, { prompt, ...parameters });
 
 export default function handler(req: NextRequest) {
+  function getNow() {
+    return new Date().toLocaleString("en-ca", {timeZone: "Asia/Ho_Chi_Minh"})
+  }
+
   return new Promise(async resolve => {
     const telegram = new TelegramService();
     const vercelUrl = process.env.VERCEL_URL;
     const webhookPath = `https://${vercelUrl}/api/telegram-webhook`;
     const functionStartTime = new Date().getTime();
     if (req.method === 'GET') {
-      console.log("Set webhook, url=" + webhookPath)
+      console.log(`${getNow()}   Set webhook, url=${webhookPath}`)
       try {
         await telegram.setWebhook(webhookPath);
         resolve(new Response(JSON.stringify({
@@ -30,7 +34,7 @@ export default function handler(req: NextRequest) {
         })));
       }
     } else {
-      console.log('processing message');
+      console.log(`${getNow()}   processing message`);
       const body = JSON.parse(await req.text());
       const msg = body.message as any;
       if (!msg || !msg.chat) {
@@ -41,11 +45,9 @@ export default function handler(req: NextRequest) {
       }
       const chatId = msg.chat.id;
 
-      console.log("message: " + msg.text + ", to chatId: " + chatId);
-      console.log(msg);
-      if(req.geo != null) {
-        console.log(`request came from ${req.geo.country}, ${req.geo.city}, (${req.geo.latitude}, ${req.geo.longitude}), ip=${req.ip}`);
-      }
+      let full_name = msg.chat.first_name
+      if(msg.chat.last_name != null) full_name += ` ${msg.chat.last_name}`
+      console.log(`${getNow()}   message="${msg.text}", request from ${full_name}, username=${msg.chat.username}, chatId=${chatId}`);
       
       if (msg.text && msg.text.startsWith('/draw ')) {
 
@@ -71,13 +73,13 @@ export default function handler(req: NextRequest) {
         } catch (e) {
           await telegram.editMessageText(chatId, sentMsg.message_id, 'Failed to draw. Please check server logs for more details.');
         }
-        console.log('Taken', new Date().getTime() - functionStartTime, 'ms to execute');
+        console.log(`${getNow()}   Taken ${new Date().getTime() - functionStartTime}ms to execute`);
         clearTimeout(timeout);
         resolve(new Response(JSON.stringify({
           success: true
         })))
       } else {
-        console.log("Show help message")
+        console.log(`${getNow()}   Show help message`)
         const sentMsg = await telegram.sendMessage(chatId, 'type "/draw what-you-want" to generate picture');
       }
     }
