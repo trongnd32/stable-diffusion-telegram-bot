@@ -81,6 +81,9 @@ export default function handler(req: NextRequest) {
       } else {
         console.log(`${getNow()}   Show help message`)
         const sentMsg = await telegram.sendMessage(chatId, 'type "/draw what-you-want" to generate picture');
+        resolve(new Response(JSON.stringify({
+          success: true
+        })))
       }
     }
   });
