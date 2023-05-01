@@ -18,6 +18,7 @@ export default function handler(req: NextRequest) {
     const webhookPath = `https://${vercelUrl}/api/telegram-webhook`;
     const functionStartTime = new Date().getTime();
     if (req.method === 'GET') {
+      console.log("Set webhook, url=" + webhookPath)
       try {
         await telegram.setWebhook(webhookPath);
         resolve(new Response(JSON.stringify({
@@ -39,7 +40,9 @@ export default function handler(req: NextRequest) {
         return;
       }
       const chatId = msg.chat.id;
-
+      
+      console.log("message, " + msg.text);
+      
       if (msg.text && msg.text.startsWith('/draw ')) {
 
         let timeout = setTimeout(() => {

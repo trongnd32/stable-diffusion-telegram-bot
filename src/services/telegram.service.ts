@@ -6,6 +6,7 @@ class TelegramService {
     this.apiBase += telegramToken;
   }
   sendMessage(chat_id, text, parse_mode = undefined) {
+    console.log("Send message: " + text)
     return fetch(`${this.apiBase}/sendMessage`, {
       method: 'POST',
       headers: {
@@ -19,6 +20,8 @@ class TelegramService {
     }).then(r => r.json())
   }
   setWebhook(url: string) {
+    console.log("Set telegram webhook, api url=" + this.apiBase);
+    
     return fetch(`${this.apiBase}/setWebhook`, {
       method: 'POST',
       headers: {
@@ -31,6 +34,8 @@ class TelegramService {
     })
   }
   sendPhoto(chat_id, photo_url, caption = '') {
+    console.log("Send photo");
+    
     return fetch(`${this.apiBase}/sendPhoto`, {
       method: 'POST',
       headers: {
@@ -44,6 +49,8 @@ class TelegramService {
     })
   }
   deleteMessage(chat_id, message_id) {
+    console.log("delete message");
+    
     return fetch(`${this.apiBase}/deleteMessage`, {
       method: 'POST',
       headers: {
@@ -56,6 +63,8 @@ class TelegramService {
     })
   }
   editMessageText(chat_id, message_id, text) {
+    console.log("edit message, " + text);
+    
     return fetch(`${this.apiBase}/editMessageText`, {
       method: 'POST',
       headers: {
